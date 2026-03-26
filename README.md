@@ -1,98 +1,117 @@
-WordPress CMS dengan Docker Compose (MySQL + Redis)
+# WordPress CMS dengan Docker Compose (MySQL + Redis)
 
-Project ini merupakan implementasi WordPress CMS menggunakan Docker Compose dengan:
+Project ini merupakan implementasi WordPress CMS menggunakan Docker Compose dengan beberapa layanan utama:
 
-MySQL sebagai database
+* **MySQL** sebagai database
+* **Redis** sebagai object cache
 
-Redis sebagai object cache
+Tujuan dari project ini adalah untuk memahami konsep **multi-container orchestration**, komunikasi antar container, serta penggunaan **volume** untuk penyimpanan data.
 
-Tujuan dari project ini adalah memahami konsep multi-container orchestration, networking antar container, serta penggunaan volume untuk persistence data.
+---
 
-Teknologi yang Digunakan
+## Teknologi yang Digunakan
 
-Docker & Docker Compose
+* Docker & Docker Compose
+* WordPress
+* MySQL 5.7
+* Redis
 
-WordPress
+---
 
-MySQL 5.7
+## Cara Menjalankan Project
 
-Redis
+1. Clone repository:
 
- Cara Menjalankan Project
-
-Clone repository:
-
-git clone https://github.com/username/wordpress-docker.git
+```
+git clone https://github.com/dianhana/wordpress-docker.git
 cd wordpress-docker
+```
 
-Jalankan container:
+2. Jalankan container:
 
+```
 docker-compose up -d
+```
 
-Cek container:
+3. Cek container:
 
+```
 docker ps
+```
 
-Akses WordPress:
+4. Akses WordPress:
 
+```
 http://localhost:8000
+```
 
-Konfigurasi Docker Compose
+---
 
-Project ini menggunakan 3 services:
+## Konfigurasi Docker Compose
 
-wordpress
+Project ini menggunakan 3 service utama:
 
-mysql
+* **wordpress**
+* **mysql**
+* **redis**
 
-redis
+---
 
-Volume
+## Volume
 
-wordpress_data → menyimpan file WordPress
+* **wordpress_data** → menyimpan file WordPress
+* **mysql_data** → menyimpan database
 
-mysql_data → menyimpan database
+---
 
-Network
+## Network
 
 Semua container berada dalam satu network sehingga dapat saling berkomunikasi.
 
-Hasil Testing
+---
 
-✅ WordPress Running
+## Hasil Testing
 
+✅ **WordPress Running**
 WordPress berhasil diakses melalui browser.
 
-✅ MySQL Connection
-
+✅ **MySQL Connection**
 Berhasil membuat dan menyimpan postingan sebagai bukti koneksi database berjalan.
 
-✅ Redis Cache
-
+✅ **Redis Cache**
 Redis berhasil dikonfigurasi dan terhubung dengan WordPress.
 
-✅ Data Persistence
-
+✅ **Data Persistence**
 Data tetap tersimpan setelah container di-restart.
 
-1. Kenapa perlu volume untuk MySQL?
+---
+
+## Pertanyaan & Jawaban
+
+### 1. Kenapa perlu volume untuk MySQL?
 
 Volume digunakan agar data database tidak hilang meskipun container dihentikan atau dihapus.
 
-2. Apa fungsi depends_on?
+### 2. Apa fungsi depends_on?
 
 Untuk mengatur urutan startup container, sehingga WordPress menunggu MySQL siap terlebih dahulu.
 
-3. Bagaimana cara WordPress connect ke MySQL?
+### 3. Bagaimana cara WordPress connect ke MySQL?
 
 WordPress menggunakan environment variable:
 
+```
 WORDPRESS_DB_HOST=mysql:3306
+```
 
-Docker menyediakan DNS internal berdasarkan nama service (mysql).
+Docker menyediakan DNS internal berdasarkan nama service (**mysql**).
 
-4. Apa keuntungan pakai Redis untuk WordPress?
+### 4. Apa keuntungan pakai Redis untuk WordPress?
 
 Redis digunakan sebagai cache untuk mempercepat akses website dengan menyimpan query database yang sering digunakan.
+
+---
+
+## Kesimpulan
 
 Dengan menggunakan Docker Compose, kita dapat menjalankan beberapa service sekaligus dalam satu environment yang terisolasi. Integrasi WordPress, MySQL, dan Redis membuat aplikasi lebih cepat, modular, dan mudah dikelola.
